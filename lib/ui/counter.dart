@@ -1,11 +1,11 @@
-import 'dart:ui';
+// ignore_for_file: use_build_context_synchronously
 
+import 'package:counter/constants/constants.dart';
 import 'package:counter/provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class CounterApp extends StatefulWidget {
   const CounterApp({Key? key}) : super(key: key);
@@ -15,6 +15,35 @@ class CounterApp extends StatefulWidget {
 }
 
 class _CounterAppState extends State<CounterApp> {
+  void authUser() async {
+    final store = GetStorage();
+    String deviceId = '';
+    try {
+      deviceId = store.read(Constants.DEVICE_ID) ?? '';
+    } catch (e) {
+      return;
+    }
+    if (deviceId.isEmpty) {
+      Uuid uuid = const Uuid();
+      deviceId = uuid.v1();
+      await store.write(Constants.DEVICE_ID, deviceId);
+      await store.write(Constants.COUNTER_VALUE, '0');
+    }
+
+    final counterProvider =
+        Provider.of<CounterProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      counterProvider.initialize();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    authUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +52,9 @@ class _CounterAppState extends State<CounterApp> {
         elevation: 0,
         backgroundColor: const Color(0xffFDF6E9),
         centerTitle: true,
-        title: const Text(
-          'P-NUT',
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(
-            'assets/images/logo.png',
-            fit: BoxFit.contain,
-          ),
+        title: Image.asset(
+          'assets/images/logo.png',
+          fit: BoxFit.contain,
         ),
       ),
       body: SizedBox(
@@ -52,7 +75,7 @@ class _CounterAppState extends State<CounterApp> {
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Consumer<CounterProvider>(
