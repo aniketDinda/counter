@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:counter/constants/constants.dart';
 import 'package:counter/provider.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,20 @@ class _CounterAppState extends State<CounterApp> {
     super.initState();
 
     authUser();
+    GetStorage().listenKey(Constants.COUNTER_VALUE, (value) {
+      updateCounterValue();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void updateCounterValue() async {
+    final counterProvider =
+        Provider.of<CounterProvider>(context, listen: false);
+    counterProvider.initialize();
   }
 
   @override
