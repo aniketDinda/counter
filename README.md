@@ -24,6 +24,8 @@ Alternatively, if docker is installed on just run the following two commands fro
 
 Now you should be ready to go 🚀
 
+https://github.com/aniketDinda/counter/assets/87167194/5a708f9b-a6ef-4d86-a821-8ac032eee421
+
 
 
 
