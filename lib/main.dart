@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 
+//Main file
+
 void main() async {
   await GetStorage.init();
   runApp(const MyApp());
