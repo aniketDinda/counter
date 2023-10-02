@@ -3,6 +3,8 @@ import 'package:get_storage/get_storage.dart';
 
 import 'constants/constants.dart';
 
+//Provider file
+
 class CounterProvider extends ChangeNotifier {
   int _counter = 0;
 
